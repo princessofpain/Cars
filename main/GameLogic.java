@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class GameLogic {
 	
-	public String compareCards(String[] myCard, String[] opponentsCard) {
+	public String compare(String[] myCard, String[] opponentsCard) {
 		int allPoints = compareEachValue(myCard, opponentsCard);
 		String result = evaluate(allPoints);
 		
@@ -13,29 +13,31 @@ public class GameLogic {
 	
 	private int compareEachValue(String[] myCard, String[] opponentsCard) {
 		int points = 0;
-		boolean isTheSame = true;
+		int hasTheSameValues = 0;
 		
 		for(int i = 2; i < 6; i++) {	
 			double myValue = Double.parseDouble(myCard[i]);
 			double opponentsValue = Double.parseDouble(opponentsCard[i]);
 			
-			if(myValue > opponentsValue) {
+			if(i == 3 && myValue < opponentsValue) {
 				points++;
-				isTheSame = false;
-			} 
+			} else if(i != 3 && myValue > opponentsValue) {
+				points++;
+			} else if(myValue == opponentsValue) {
+				hasTheSameValues++;
+				if(hasTheSameValues == 4) {
+					points = 2;
+				}
+			}
 		}
-		
-		if(isTheSame) {
-			return 7;
-		}
-		
+
 		return points;
 	}
 	
 	private String evaluate(int allPoints) {
 		String result = "";
 		
-		if(allPoints == 7) {
+		if(allPoints == 2) {
 			result = "It is equal.";
 		} else if(allPoints > 2) {
 			result = "You win.";
@@ -46,14 +48,34 @@ public class GameLogic {
 		return result;
 	}
 	
-	public String[] calculateRankingOf(String[][] remainingCards) {
-		ArrayList<String[]> ranking = new ArrayList<String[]>();
+	public String[][] calculateRankingOf(String[][] remainingCards) {
+		ArrayList<String[]> rankings = new ArrayList<String[]>();
 		
 		for(String[] card: remainingCards) {
-			for(int i = 2; i < 7; i++) {
-				
+			rankings.add(card);
+		}
+		
+		for(int i = 0; i < remainingCards.length; i++) {
+			String[] card = remainingCards[i];
+			
+			for(int j = 0; j < 6; j++) {
+				if(j != i) {
+					String[] cardToCompare = remainingCards[j];
+					String result = compare(card,cardToCompare);
+					
+					int indexOriginal = rankings.indexOf(card);
+					int indexChange = rankings.indexOf(cardToCompare);
+
+					if(result == "You win." && indexChange < indexOriginal || 
+					   result == "You lose." && indexChange > indexOriginal) {
+						rankings.set(indexOriginal, cardToCompare);
+						rankings.set(indexChange, card);
+					} 
+				}		
 			}
 		}
-		return null;
+		
+		String[][] ranking = rankings.toArray(new String[rankings.size()][6]);
+		return ranking;
 	}
 }
