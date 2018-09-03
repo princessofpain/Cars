@@ -1,11 +1,21 @@
 package main;
 
+import java.util.ArrayList;
+
+import com.sun.istack.internal.NotNull;
+
 // how to add the picture?
 
 public class Card {
 	
-	private String[] information = new String[6];
 	private int id;
+	
+	public String brand;
+	public String model;
+	public Double displacement;
+	public Double zeroToHundred;
+	public Integer maxSpeed;
+	public Integer horsepower;
 	
 	public void setId(int id) {
 		this.id = id;
@@ -15,14 +25,15 @@ public class Card {
 		return this.id;
 	}
 	
-	// String[]  information = {brand, model, engine, 0To100, maxSpeed}
-	public void setCard(String[] information) {	
-		for(int i = 0; i < 6; i++) {
-			this.information[i] = information[i];
+	public void setCard(String brand, String model, Double displacement, Double zeroToHundred, Integer maxSpeed, Integer horsepower) {	
+		if(brand == null || model == null || displacement == null || zeroToHundred == null || maxSpeed == null || horsepower == null) {
+			throw new IllegalArgumentException(); 
 		}
-	}
-	
-	public String[] getCardInformation() {
-		return information;
+		this.brand = brand;
+		this.model = model;
+		this.displacement = displacement;
+		this.zeroToHundred = zeroToHundred;
+		this.maxSpeed = maxSpeed;
+		this.horsepower = horsepower;
 	}
 }

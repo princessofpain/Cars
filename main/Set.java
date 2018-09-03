@@ -2,42 +2,37 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Set {
 	
-	private String[][] allCards;
+	private ArrayList<Card> set = new ArrayList<Card>();
 	
-	public void createSet(String[][] details) {	
-		if(detailsAreNotNull(details)) {
-			fillSetWithDetails(details);
-		} 
-	}
-	
-	private boolean detailsAreNotNull(String[][] details) {
-		boolean isNotNull = true;
-		
-		for(int i = 0; i < 6 && isNotNull; i++) {
-			if(Arrays.asList(details[i]).contains(null)) {
-				isNotNull = false;
-			}
+	public void createSet(Card[] set) {	
+		for(Card card: set) {
+			this.set.add(card);
 		}
-		
-		return isNotNull;
 	}
 	
-	private void fillSetWithDetails(String[][] details) {
-		ArrayList<String[]> cardInput = new ArrayList<String[]>();
-		Card card = new Card();
-		
-		for(String[] singleCardInformation: details) {
-			card.setCard(singleCardInformation);	
-			cardInput.add(singleCardInformation);
+	public Card[] getSet() {
+		Card[] finalSet = set.toArray(new Card[set.size()]);
+		return finalSet;
+	}
+	
+	public void add(Card cardToAdd) {
+		if(set.size() < 6) {
+			set.add(cardToAdd);
+		} else {
+			throw new IndexOutOfBoundsException();
 		}
-		
-		allCards = cardInput.toArray(new String[6][6]);
 	}
 	
-	public String[][] getAllCards() {
-		return allCards;
+	public void remove(Card cardToRemove) {
+		if(set.size() > 1) {
+			set.remove(cardToRemove);
+		} else {
+			throw new IndexOutOfBoundsException();
+		}
+
 	}
 }
