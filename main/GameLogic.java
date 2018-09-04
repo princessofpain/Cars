@@ -4,33 +4,45 @@ import java.util.ArrayList;
 
 public class GameLogic {
 	
-	public String compare(String[] myCard, String[] opponentsCard) {
+	public String compare(Card myCard, Card opponentsCard) {
 		int allPoints = compareEachValue(myCard, opponentsCard);
 		String result = evaluate(allPoints);
 		
 		return result;
 	}
 	
-	private int compareEachValue(String[] myCard, String[] opponentsCard) {
+	private int compareEachValue(Card myCard, Card opponentsCard) {
 		int points = 0;
 		int hasTheSameValues = 0;
-		
-		for(int i = 2; i < 6; i++) {	
-			double myValue = Double.parseDouble(myCard[i]);
-			double opponentsValue = Double.parseDouble(opponentsCard[i]);
-			
-			if(i == 3 && myValue < opponentsValue) {
-				points++;
-			} else if(i != 3 && myValue > opponentsValue) {
-				points++;
-			} else if(myValue == opponentsValue) {
-				hasTheSameValues++;
-				if(hasTheSameValues == 4) {
-					points = 2;
-				}
-			}
-		}
 
+		if(myCard.displacement > opponentsCard.displacement) {
+			points ++;
+		} else if(myCard.displacement.equals(opponentsCard.displacement)) {
+			hasTheSameValues++;
+		}
+		
+		if(myCard.zeroToHundred < opponentsCard.zeroToHundred) {
+			points++;
+		} else if(myCard.zeroToHundred.equals(opponentsCard.zeroToHundred)) {
+			hasTheSameValues++;
+		}
+		
+		if(myCard.maxSpeed > opponentsCard.maxSpeed) {
+			points++;
+		} else if(myCard.maxSpeed.equals(opponentsCard.maxSpeed)) {
+			hasTheSameValues++;
+		}
+		
+		if(myCard.horsepower > opponentsCard.horsepower) {
+			points++;
+		} else if(myCard.horsepower.equals(opponentsCard.horsepower)) {
+			hasTheSameValues++;
+		}
+		
+		if(hasTheSameValues == 4) {
+			points = 2;
+		}
+		
 		return points;
 	}
 	
@@ -48,19 +60,16 @@ public class GameLogic {
 		return result;
 	}
 	
-	public String[][] calculateRankingOf(String[][] remainingCards) {
-		ArrayList<String[]> rankings = new ArrayList<String[]>();
+	public Card[] calculateRankingOf(Card[] remainingCards) {
+		ArrayList<Card> rankings = new ArrayList<Card>();
 		
-		for(String[] card: remainingCards) {
+		for(Card card: remainingCards) {
 			rankings.add(card);
 		}
 		
-		for(int i = 0; i < remainingCards.length; i++) {
-			String[] card = remainingCards[i];
-			
-			for(int j = 0; j < 6; j++) {
-				if(j != i) {
-					String[] cardToCompare = remainingCards[j];
+		for(Card card: remainingCards) {		
+			for(Card cardToCompare: remainingCards) {
+				if(!cardToCompare.equals(card)) {
 					String result = compare(card,cardToCompare);
 					
 					int indexOriginal = rankings.indexOf(card);
@@ -70,12 +79,12 @@ public class GameLogic {
 					   result == "You lose." && indexChange > indexOriginal) {
 						rankings.set(indexOriginal, cardToCompare);
 						rankings.set(indexChange, card);
-					} 
-				}		
+					}	
+				} 
 			}
 		}
 		
-		String[][] ranking = rankings.toArray(new String[rankings.size()][6]);
+		Card[] ranking = rankings.toArray(new Card[rankings.size()]);
 		return ranking;
 	}
 }

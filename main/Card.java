@@ -26,14 +26,16 @@ public class Card {
 	}
 	
 	public void setCard(String brand, String model, Double displacement, Double zeroToHundred, Integer maxSpeed, Integer horsepower) {	
+		
 		if(brand == null || model == null || displacement == null || zeroToHundred == null || maxSpeed == null || horsepower == null) {
 			throw new IllegalArgumentException(); 
+		} else {
+			this.brand = brand;
+			this.model = model;
+			this.displacement = displacement;
+			this.zeroToHundred = zeroToHundred;
+			this.maxSpeed = maxSpeed;
+			this.horsepower = horsepower;
 		}
-		this.brand = brand;
-		this.model = model;
-		this.displacement = displacement;
-		this.zeroToHundred = zeroToHundred;
-		this.maxSpeed = maxSpeed;
-		this.horsepower = horsepower;
 	}
 }
